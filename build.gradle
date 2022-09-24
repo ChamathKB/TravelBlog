@@ -4,6 +4,23 @@ plugins {
     id 'com.android.library' version '7.2.1' apply false
 }
 
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+//    dependencies {
+//        classpath 'com.android.tools.build:gradle:7.3.3'
+//    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
