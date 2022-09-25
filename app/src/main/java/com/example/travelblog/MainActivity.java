@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
         TextView mainTextView = findViewById(R.id.mainTextView);
         mainTextView.setText("Hello educative.io");
+
         startActivity(new Intent(this, BlogDetailsActivity.class));
     }
 }

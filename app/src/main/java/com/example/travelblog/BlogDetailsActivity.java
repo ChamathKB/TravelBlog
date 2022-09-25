@@ -11,52 +11,78 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.travelblog.http.Blog;
+import com.travelblog.http.BlogArticlesCallback;
+import com.travelblog.http.BlogHttpClient;
+
+import java.util.List;
 
 public class BlogDetailsActivity extends AppCompatActivity {
 
-    public static final String IMAGE_URL = "https://bitbucket.org/dmytrodanylyk/travel-blog-resources/raw/" + "3436e16367c8ec2312a0644bebd2694d484eb047/images/sydney_image.jpg";
-    public static final String AVATAR_URL = "https://bitbucket.org/dmytrodanylyk/travel-blog-resources/raw/" + "3436e16367c8ec2312a0644bebd2694d484eb047/avatars/avatar1.jpg";
+    private TextView textTitle;
+    private TextView textDate;
+    private TextView textAuthor;
+    private TextView textRating;
+    private TextView textDescription;
+    private TextView textViews;
+    private RatingBar ratingBar;
+    private ImageView imageAvatar;
+    private ImageView imageMain;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blog_details);
+        setContentView(R.layout.activity_blog_details.);
 
-        ImageView imageMain = findViewById(R.id.imageMain);
-        Glide.with(this)
-                .load(IMAGE_URL)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(imageMain);
-
-        ImageView imageAvatar = findViewById(R.id.imageAvatar);
-        Glide.with(this)
-                .load(AVATAR_URL)
-                .transform(new CircleCrop())
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(imageAvatar);
+        imageMain = findViewById(R.id.imageMain);
+        imageAvatar = findViewById(R.id.imageAvatar);
 
         ImageView imageBack = findViewById(R.id.imageBack);
         imageBack.setOnClickListener(v -> finish());
 
-        TextView textTitle = findViewById(R.id.textTitle);
-        textTitle.setText("G'day from Sydney");
+        textTitle = findViewById(R.id.textTitle);
+        textDate = findViewById(R.id.textDate);
+        textAuthor = findViewById(R.id.textAuthor);
+        textRating = findViewById(R.id.textRating);
+        textViews = findViewById(R.id.textViews);
+        textDescription = findViewById(R.id.textDescription);
+        ratingBar = findViewById(R.id.ratingBar);
 
-        TextView textDate = findViewById(R.id.textDate);
-        textDate.setText("August 2, 2019");
+        loadData();
+    }
 
-        TextView textAuthor = findViewById(R.id.textAuthor);
-        textAuthor.setText("Grayson Wells");
+    private void loadData() {
+        BlogHttpClient.INSTANCE.loadBlogArticles(new BlogArticlesCallback() {
+            @Override
+            public void onSuccess(List<Blog> blogList) {
+                runOnUiThread(() -> showData(blogList.get(0)));
+            }
 
-        TextView textRating = findViewById(R.id.textRating);
-        textRating.setText("4.4");
+            @Override
+            public void onError() {
+                // handle error
+            }
+        });
+    }
 
-        TextView textViews = findViewById(R.id.textViews);
-        textViews.setText("(2687 views)");
+    private void showData(Blog blog) {
+        textTitle.setText(blog.getTitle());
+        textDate.setText(blog.getDate());
+        textAuthor.setText(blog.getAuthor().getName());
+        textRating.setText(String.valueOf(blog.getRating()));
+        textViews.setText(String.format("(%d views)", blog.getViews()));
+        textDescription.setText(blog.getDescription());
+        ratingBar.setRating(blog.getRating());
 
-        TextView textDescription = findViewById(R.id.textDescription);
-        textDescription.setText("Australia is one of the most popular travel destinations in the world.");
+        Glide.with(this)
+                .load(blog.getImage())
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(imageMain);
 
-        RatingBar ratingBar = findViewById(R.id.ratingBar);
-        ratingBar.setRating(4.4f);
+        Glide.with(this)
+                .load(blog.getAuthor().getAvatar())
+                .transform(new CircleCrop())
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(imageAvatar);
     }
 }
