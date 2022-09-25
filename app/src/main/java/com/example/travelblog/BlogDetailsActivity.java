@@ -8,6 +8,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+
 public class BlogDetailsActivity extends AppCompatActivity {
 
     public static final String IMAGE_URL = "https://bitbucket.org/dmytrodanylyk/travel-blog-resources/raw/" + "3436e16367c8ec2312a0644bebd2694d484eb047/images/sydney_image.jpg";
@@ -16,13 +20,20 @@ public class BlogDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activtiy_blog_details);
+        setContentView(R.layout.activity_blog_details);
 
         ImageView imageMain = findViewById(R.id.imageMain);
-        imageMain.setImageResource(R.drawable.sydney_image);
+        Glide.with(this)
+                .load(IMAGE_URL)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(imageMain);
 
         ImageView imageAvatar = findViewById(R.id.imageAvatar);
-        imageAvatar.setImageResource(R.drawable.avatar);
+        Glide.with(this)
+                .load(AVATAR_URL)
+                .transform(new CircleCrop())
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(imageAvatar);
 
         ImageView imageBack = findViewById(R.id.imageBack);
         imageBack.setOnClickListener(v -> finish());
