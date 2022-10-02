@@ -41,4 +41,6 @@ public class Blog {
     public void setAuthor(Author author) {
         this.author = author;
     }
+
+    public String getId() { return id; }
 }

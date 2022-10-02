@@ -48,4 +48,10 @@ public final class BlogHttpClient {
                         return;
                     }
                 }
+            } catch (IOException e) {
+                Log.e("BlogHttpClient", "Error loading blog articles", e);
             }
+            callback.onError();
+        });
+    }
+}
