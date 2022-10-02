@@ -21,6 +21,8 @@ public class MainAdapter extends ListAdapter<Blog, MainAdapter.MainViewHolder> {
 
     private OnItemClickListener clickListener;
 
+    private List<Blog> originalList = new ArrayList<>();
+
     public MainAdapter(OnItemClickListener clickListener) {
         super(DIFF_CALLBACK);
         this.clickListener = clickListener;
@@ -39,6 +41,32 @@ public class MainAdapter extends ListAdapter<Blog, MainAdapter.MainViewHolder> {
         holder.bindTo(getItem(position));
     }
 
+    public void setData(@Nullable List<Blog> list) {
+        originalList = list;
+        super.submitList(list);
+    }
+
+    public void filter(String query) {
+        List<Blog> filteredList = new ArrayList<>();
+        for (Blog blog : originalList) {
+            if (blog.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(blog);
+            }
+        }
+        submitList(filteredList);
+    }
+
+    public void sortByTitle() {
+        List<Blog> currentList = new ArrayList<>(getCurrentList());
+        Collections.sort(currentList, (o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
+        submitList(currentList);
+    }
+
+    public void sortByDate() {
+        List<Blog> currentList = new ArrayList<>(getCurrentList());
+        Collections.sort(currentList, (o1, o2) -> o2.getDateMillis().compareTo(o1.getDateMillis()));
+        submitList(currentList);
+    }
 
     static class MainViewHolder extends RecyclerView.ViewHolder {
 

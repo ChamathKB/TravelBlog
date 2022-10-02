@@ -33,7 +33,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activtiy_blog_details);
+        setContentView(R.layout.activity_blog_details);
 
         imageMain = findViewById(R.id.imageMain);
         imageAvatar = findViewById(R.id.imageAvatar);
