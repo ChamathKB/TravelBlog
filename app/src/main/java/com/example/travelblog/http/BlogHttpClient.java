@@ -17,8 +17,9 @@ public final class BlogHttpClient {
 
     public static final BlogHttpClient INSTANCE = new BlogHttpClient();
 
-    private static final String BASE_URL = "https://bitbucket.org/dmytrodanylyk/travel-blog-resources/raw/";
-    private static final String BLOG_ARTICLES_URL = BASE_URL + "8550ef2064bf14fcf3b9ff322287a2e056c7e153/blog_articles.json";
+    public static final String BASE_URL = "https://bitbucket.org/dmytrodanylyk/travel-blog-resources";
+    public static final String PATH = "/raw/3eede691af3e8ff795bf6d31effb873d484877be";
+    private static final String BLOG_ARTICLES_URL = BASE_URL + PATH + "/blog_articles.json";
 
     private Executor executor;
     private OkHttpClient client;
